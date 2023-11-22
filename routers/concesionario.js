@@ -37,6 +37,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     concesionarios.push(req.body)
+    res.json({message:"Concesionario agregado con exito"})
 })
 
 module.exports = {
@@ -55,10 +56,11 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-
+    concesionarios[req.id] = req.body;
+    res.json({message:"El concesionario ha sido actualizado con exito"})
 })
 
-
-/*
-DELETE /concesionarios/:id → borra un concesionario
-*/
+router.delete('/:id', (req,res)=>{
+    concesionarios.splice(req.id, 1)
+    res.json({message: "Archivo borrado con exito"})
+})
