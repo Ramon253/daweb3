@@ -7,6 +7,7 @@ const middlewareCoches = require('../middleware/coche');
 /*###############################################################*/
 /*---------------------routerConcesionarios----------------------*/
 /*______________Middleware_____________________________*/
+router.use('/:id/coches', middlewareCoches.checkBody)
 router.use(middlewareConcesioanario.checkBody)
 router.use('/:id', middlewareConcesioanario.hasConcesionario)
 /*__________________________________________________*/
@@ -23,7 +24,6 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-    console.log(req.id)
     concesionarios[req.id] = req.body;
 
     res.json({message: "El concesionario ha sido actualizado con exito"})
@@ -38,8 +38,6 @@ router.delete('/:id', (req, res) => {
 /*###############################################################*/
 /*---------------------ruta Coches------------------------------*/
 /*Middleware*/
-router.post('/:id/coches', middlewareCoches.checkBodyPost)
-router.put('/:id/coches', middlewareCoches.checkBodyPut)
 router.use('/:id/coches/:cocheid', (req, res, next) => {
     if (concesionarios[req.id].coches.length <= req.params.cocheid) {
         res.status(400).json('El id de coche dado es muy alto')

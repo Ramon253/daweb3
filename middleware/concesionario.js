@@ -11,30 +11,18 @@ module.exports = {
             return;
         }
         let reqBodyKeys = Object.keys(req.body)
-        if (req.method === 'PUT') {
-            reqBodyKeys = reqBodyKeys.filter(key => cochesKeys.includes(key))
-            if (bodyKeys.length === 3) {
-                next()
-                return;
-            }
-            reqBodyKeys = Object.keys(req.body)
-        }
-        let reqCoches = Object.keys(req.body.coches)
 
-        reqBodyKeys = reqBodyKeys.filter(key => bodyKeys.includes(key))
-        if (reqBodyKeys.length === 1 && reqBodyKeys[0] === 'coches') {
+        if (cochesKeys.includes(reqBodyKeys[0])){
             next()
             return;
         }
+
+        reqBodyKeys = reqBodyKeys.filter(key => bodyKeys.includes(key))
         if (reqBodyKeys.length !== 3) {
             res.status(400).json({Message: "Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido"})
             return;
         }
 
-        if (reqCoches.length === 0) {
-            next()
-            return;
-        }
 
         for (let coche of req.body.coches) {
             let reqCochesKeys = Object.keys(coche)
