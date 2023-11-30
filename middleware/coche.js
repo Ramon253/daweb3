@@ -3,11 +3,11 @@ express().use(express.json())
 const cochesKeys = ["modelo", "cv", "precio"]
 
 module.exports = {
-     checkBody: (req, res, next) => {
-         if (req.method === 'GET' || req.method === 'DELETE'){
-             next()
-             return;
-         }
+    checkBody: (req, res, next) => {
+        if (req.method === 'GET' || req.method === 'DELETE') {
+            next()
+            return;
+        }
 
         let keys = Object.keys(req.body)
         keys = keys.filter(key => cochesKeys.includes(key))
