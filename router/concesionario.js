@@ -13,26 +13,43 @@ router.use("/:id", middlewareConcesioanario.hasConcesionario);
 
 /*__________________________________________________*/
 router.get("/", async (req, res) => {
-  const concesionarios = await mongoose.find();
-
-  for (const concesionario of concesionarios) {
-    console.log(concesionario.coches);
-  }
-  res.status(200).json(concesionarios);
+  mongoose
+    .find()
+    .select("-__v")
+    .then((concesionarios) => res.status(200).json(concesionarios))
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ message: "Error inesperado con la base de datos" });
+      console.error(err);
+    });
 });
 
 router.post("/", (req, res) => {
-  concesionarios.push(req.body);
-  res.status(201).json({ message: "Concesionario agregado con exito" });
+  mongoose
+    .insertMany(req.body)
+    .then((dbResponse) =>
+      res.status(201).json({ message: "Concesionario agregado con exito" }),
+    )
+    .catch((err) => res.status(500).json({ message: "error inesperado" }));
 });
 router.get("/:id", (req, res) => {
-  res.json(concesionarios[req.id]);
+  mongoose
+    .findOne()
+    .select("-__v")
+    .skip(req.id)
+    .then((concesionario) => res.status(200).json(concesionario))
+    .catch((err) => console.error(err));
 });
 
-router.put("/:id", (req, res) => {
-  concesionarios[req.id] = req.body;
-
-  res.json({ message: "El concesionario ha sido actualizado con exito" });
+router.put("/:id", async (req, res) => {
+  let mongoId = await mongoose.findOne({}, { _id: 1 }).skip(req.id);
+  mongoose
+    .findOneAndUpdate({ _id: mongoId }, { $set: req.body, $inc: { __v: 1 } })
+    .then(() =>
+      res.status(200).json({ message: "Concesionari actualizado con esxito" }),
+    )
+    .catch((err) => res.status(500).send("Errror inesperado", err));
 });
 
 router.delete("/:id", (req, res) => {

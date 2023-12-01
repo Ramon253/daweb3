@@ -3,6 +3,7 @@ const express = require("express");
 express().use(express.json);
 const bodyKeys = ["nombre", "direccion", "coches"];
 const cochesKeys = ["modelo", "cv", "precio"];
+const mongoose = require('../models/concesionario')
 
 module.exports = {
   checkBody: (req, res, next) => {
@@ -42,7 +43,7 @@ module.exports = {
   },
   hasConcesionario: (req, res, next) => {
     req.id = req.params.id;
-    if (req.id >= concesionarios.length) {
+    if (req.id >= mongoose.countDocuments()) {
       res.status(404).json({ message: "El id dado es muy grande" });
     } else next();
   },
