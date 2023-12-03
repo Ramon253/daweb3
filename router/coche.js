@@ -5,7 +5,7 @@ const middleware = require("../middleware/coche");
 const mongoose = require("../models/concesionario");
 
 router.put("/", (req, res, next) => {
-	if (middleware.checkBodyCoche(req.body)) {
+	if (middleware.checkBodyCoche(Object.keys(req.body))) {
 		next();
 		return;
 	}
@@ -15,7 +15,7 @@ router.put("/", (req, res, next) => {
 	});
 });
 router.post("/", (req, res, next) => {
-	if (middleware.checkBodyCoche(req.body)) {
+	if (middleware.checkBodyCoche(Object.keys(req.body))) {
 		next();
 		return;
 	}
