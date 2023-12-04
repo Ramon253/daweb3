@@ -36,6 +36,11 @@ module.exports = {
     next();
   },
   hasConcesionario: async function(req, res, next) {
+    if (isNaN(req.params.id)){
+      req.id = req.params.id
+      next();
+      return;
+    }
     let length = await mongoose.countDocuments()
     if (req.params.id >= length) {
       res.status(404).json({ message: "El id dado es muy grande" });

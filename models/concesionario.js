@@ -6,12 +6,12 @@ const concesionariosSchema = new mongoose.Schema({
   coches: {
     type: [
       {
-        modelo: { type: String , require},
-        cv: { type: String , require},
-        precio: { type: String , require},
+        modelo: { type: String, require: true },
+        cv: { type: Number, require: true },
+        precio: { type: Number, require: true },
       },
     ],
-    require: false,
+    require: true,
   },
 });
 
