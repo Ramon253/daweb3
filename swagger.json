@@ -1,0 +1,286 @@
+{
+  "swagger": "2.0",
+  "basePath": "/",
+  "info": {
+    "title": "Concesionarios API",
+    "version": "1.1.1"
+  },
+  "definitions": {
+    "Coche": {
+      "type": "object",
+      "properties": {
+        "modelo": {
+          "type": "string"
+        },
+        "cv": {
+          "type": "number"
+        },
+        "precio": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "modelo",
+        "cv",
+        "precio"
+      ]
+    },
+    "Concesionario": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string"
+        },
+        "direccion": {
+          "type": "string"
+        },
+        "coches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Coche"
+          }
+        }
+      },
+      "required": [
+        "nombre",
+        "direccion",
+        "coches"
+      ]
+    }
+  },
+  "paths": {
+    "/concesionarios": {
+      "get": {
+        "summary": "Get all concesionarios.",
+        "responses": {
+          "200": {
+            "description": "Array with all concesionarios",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Concesionario"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create one concesionario",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "concesionario",
+            "schema": {
+              "$ref": "#/definitions/Concesionario"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{message : 'concesionario creado con exito'}"
+          }
+        }
+      }
+    },
+    "/concesionarios/{id}": {
+      "get": {
+        "summary": "Get one concesionario by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch one concesionario",
+            "schema": {
+              "$ref": "#/definitions/Concesionario"
+            }
+          },
+          "400": {
+            "description": "{ Message:'Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido'}"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update one concesionario by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "concesionario",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Concesionario"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{message: 'Concesionario creado con exito'}"
+          },
+          "400": {
+            "description": "{Message:'Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido'}"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete one concesionario by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Concesionario eliminado con exito'"
+          }
+        }
+      }
+    },
+    "/concesionarios/{id}/coches": {
+      "get": {
+        "summary": "Get all coches from a concesionario especified by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch all coches from concesionario",
+            "schema": {
+              "$ref": "#/definitions/Coche"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create one coche in a concesionario specified by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "coche",
+            "schema": {
+              "$ref": "#/definitions/Coche"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Coche agregdo con exito'"
+          }
+        }
+      }
+    },
+    "/concesionarios/{id}/coches/{cocheId}": {
+      "get": {
+        "summary": "Get one coche by ID from a concesionario especcified by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "cocheId",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch one coche"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update one coche by its ID from a concesionario specified by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "cocheId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "coche",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Coche"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Coche actualizado con exito'"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete one coche by its ID from a concesionario specified by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "cocheId",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Coche eliminado con exito'"
+          }
+        }
+      }
+    }
+  }
+}
