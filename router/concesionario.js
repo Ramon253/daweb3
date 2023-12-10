@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const routerCoche = require('./coche');
+const routerCoche = require("./coche");
 const middlewareConcesioanario = require("../middleware/concesionario");
 const mongoose = require("../models/concesionario");
 express().use(express.json);
@@ -10,7 +10,7 @@ express().use(express.json);
 /*______________Middleware_____________________________*/
 
 router.use(middlewareConcesioanario.checkBody);
-router.use("/:id", middlewareConcesioanario.hasConcesionario);
+router.use("/:id", middlewareConcesioanario.hasConcesionarioId);
 
 /*__________________________________________________*/
 router.get("/", async (req, res) => {
@@ -19,9 +19,7 @@ router.get("/", async (req, res) => {
     .select("-__v")
     .then((concesionarios) => res.status(200).json(concesionarios))
     .catch((err) => {
-      res
-        .status(500)
-        .json({ message: "Error inesperado con la base de datos" });
+      res.status(500);
       console.error(err);
     });
 });
@@ -30,13 +28,13 @@ router.post("/", (req, res) => {
   mongoose
     .insertMany(req.body)
     .then(() =>
-      res.status(201).json({ message: "Concesionario agregado con exito" }),
-    )
-    .catch((err) => res.status(500).json({ message: "error inesperado" }));
+      res.status(201).json({ message: "Concesionario creado con exito" }),
+    );
 });
+
 router.get("/:id", (req, res) => {
   mongoose
-    .findOne({_id : req.id})
+    .findOne({ _id: req.id })
     .select("-__v")
     .then((concesionario) => res.status(200).json(concesionario))
     .catch((err) => console.error(err));
@@ -60,7 +58,6 @@ router.delete("/:id", async (req, res) => {
     .catch((err) => res.status(500).send("Errror inesperado" + err));
 });
 
-router.use('/:id/coches', routerCoche);
+router.use("/:id/coches", routerCoche);
 
 module.exports = router;
-

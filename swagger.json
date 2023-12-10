@@ -80,7 +80,10 @@
         ],
         "responses": {
           "200": {
-            "description": "{message : 'concesionario creado con exito'}"
+            "description": "{ Message : 'concesionario creado con exito' }"
+          },
+          "400": {
+            "description": "El cuerpo de la request no es valido, ya sea por los atributos del concesionario o por los atributos del los coches"
           }
         }
       }
@@ -93,6 +96,7 @@
             "in": "path",
             "name": "id",
             "type": "string",
+            "description": "ObjectId or index",
             "required": true
           }
         ],
@@ -103,8 +107,8 @@
               "$ref": "#/definitions/Concesionario"
             }
           },
-          "400": {
-            "description": "{ Message:'Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido'}"
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe"
           }
         }
       },
@@ -118,6 +122,7 @@
             "in": "path",
             "name": "id",
             "type": "string",
+            "description": "ObjectId or index",
             "required": true
           },
           {
@@ -131,10 +136,13 @@
         ],
         "responses": {
           "200": {
-            "description": "{message: 'Concesionario creado con exito'}"
+            "description": " {message: 'Concesionario actualizado con exito'}"
+          },
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe"
           },
           "400": {
-            "description": "{Message:'Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido'}"
+            "description": "El cuerpo de la request no es valido, ya sea por los atributos del concesionario o por los atributos del los coches"
           }
         }
       },
@@ -144,6 +152,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           }
@@ -151,6 +160,9 @@
         "responses": {
           "200": {
             "description": "Message:'Concesionario eliminado con exito'"
+          },
+          "404": {
+            "description": "El ID dado es incorrecto, o el indice es muy alto o el objectID no existe"
           }
         }
       }
@@ -162,6 +174,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           }
@@ -192,6 +205,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           }
@@ -199,6 +213,12 @@
         "responses": {
           "200": {
             "description": "Message:'Coche agregdo con exito'"
+          },
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe"
+          },
+          "400": {
+            "description": "El cuerpo de la request no es valido"
           }
         }
       }
@@ -210,12 +230,14 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "required": true,
             "type": "string"
           },
           {
             "in": "path",
             "name": "cocheId",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           }
@@ -223,6 +245,9 @@
         "responses": {
           "200": {
             "description": "Fetch one coche"
+          },
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe, puede ser tanto del coche como del concesionario"
           }
         }
       },
@@ -235,12 +260,14 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           },
           {
             "in": "path",
             "name": "cocheId",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           },
@@ -256,6 +283,12 @@
         "responses": {
           "200": {
             "description": "Message:'Coche actualizado con exito'"
+          },
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe, puede ser tanto del coche como del concesionario"
+          },
+          "400": {
+            "description": "El cuerpo de la request no es valido"
           }
         }
       },
@@ -265,12 +298,14 @@
           {
             "in": "path",
             "name": "id",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           },
           {
             "in": "path",
             "name": "cocheId",
+            "description": "ObjectId or index",
             "type": "string",
             "required": true
           }
@@ -278,6 +313,9 @@
         "responses": {
           "200": {
             "description": "Message:'Coche eliminado con exito'"
+          },
+          "404": {
+            "description": "El id dado es incorrecto, o el indice es muy alto o el objectID no existe, puede ser tanto del coche como del concesionario"
           }
         }
       }

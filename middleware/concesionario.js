@@ -2,7 +2,6 @@ const express = require("express");
 const { checkBodyCoche } = require("./coche");
 express().use(express.json);
 const bodyKeys = ["nombre", "direccion", "coches"];
-const cochesKeys = ["modelo", "cv", "precio"];
 const mongoose = require("../models/concesionario");
 
 module.exports = {
@@ -20,33 +19,39 @@ module.exports = {
     reqBodyKeys = reqBodyKeys.filter((key) => bodyKeys.includes(key));
     if (reqBodyKeys.length !== 3) {
       res.status(400).json({
-        Message:
-          "Debes enviar un cuerpo con la request, o el cuerpo de la request no es valido"
+        Message: "El cuerpo de la request no es valido",
       });
     }
 
-
     for (let coche of req.body.coches) {
-
       if (!checkBodyCoche(Object.keys(coche))) {
-        res.status(400).json({ Message: "El campo de coches es incorrecto" });
+        res
+          .status(400)
+          .json({ Message: "El campo de coches de la request no es valido" });
         return;
       }
     }
     next();
   },
-  hasConcesionario: async function(req, res, next) {
-    if (isNaN(req.params.id)){
-      req.id = req.params.id
-      next();
-      return;
-    }
-    let length = await mongoose.countDocuments()
-    if (req.params.id >= length) {
-      res.status(404).json({ message: "El id dado es muy grande" });
-      return;
-    }
-    req.id = await mongoose.findOne().select("_id").skip(req.params.id)
-    next()
-  }
+  hasConcesionarioId: async function (req, res, next) {
+    if (isNaN(req.params.id)) {
+      mongoose.findOne({ _id: req.params.id }).then((element) => {
+          req.id = req.params.id;
+          next();
+      }).catch(err => {
+        console.error(err);
+        res.status(404).json({ Message: "El ObjectID del concesionario dado no existe" });
+      });
+    }else
+      mongoose
+      .findOne()
+      .select("_id")
+      .skip(req.params.id)
+      .then((id) => {
+        if (id !== null) {
+          req.id = id;
+          next();
+        } else res.status(404).json({ message: "El indice del concesionario dado es muy alto" });
+      });
+  },
 };

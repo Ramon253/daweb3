@@ -30,15 +30,14 @@ router.get("/", (req, res) => {
     .then((cars) => {
       res.status(200).json(cars);
     })
-    .catch((err) => res.status(500));
 });
 router.get("/:id", (req, res) => {
   getCar(req.id, req.params.id).then((coche) => {
     if (!coche) {
       res
-        .status(400)
+        .status(404)
         .send(
-          "no hay tantos coches en el concesionario, pruebe un id mas bajo",
+          "El ID del coche dado es incorrecto",
         );
     } else res.status(200).json(coche);
   });
@@ -51,16 +50,33 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  let coche = await getCar(req.id);
-  if (!coche) res.status(400);
-
-  coche.coches[req.params.id] = req.body;
-  coche.save();
-  res.status(200).json({ message: "Coche agregado con exito" });
+  let coches = await getCar(req.id);
+  if (isNaN(req.params.id)){
+    for (const cochesKey in coches.coches) {
+      if(coches.coches[cochesKey]._id.valueOf() === req.params.id) {
+        coches.coches[cochesKey] = req.body
+        res.status(200).json({ message: "Coche actualizado con exito" });
+        coches.save();
+        return;
+      }
+    }
+    res.status(404).json({Message:"El ObjectID del coche dado no existe"})
+    return;
+  }
+  if (req.params.id >= coches.coches.length){
+    res.status(404).json({Message: "El indice del coche dado es muy alto"})
+  }
+  coches.coches[req.params.id] = req.body;
+  coches.save();
+  res.status(200).json({ message: "Coche actualizado con exito" });
 });
 
 router.delete("/:id", async (req, res) => {
   let coche = await getCar(req.id, req.params.id);
+  if (!coche){
+    res.status(404).json({ Message: "El id dado no existe" });
+    return;
+  }
   mongoose
     .updateOne(
       { _id: req.id },
@@ -68,7 +84,9 @@ router.delete("/:id", async (req, res) => {
         $pull: { coches: { _id: coche._id } },
       },
     )
-    .then(() => res.status(200).send("Eliminado con exito"));
+    .then(() => {
+      res.status(200).json({ Message: "Coche eliminado con exito" });
+    });
 });
 
 async function getCar(id, carId = -1) {
@@ -79,6 +97,7 @@ async function getCar(id, carId = -1) {
     for (const coche of coches.coches) {
         if (coche._id.valueOf() === carId) return coche
     }
+    return false;
   }
   if (coches.coches.length <= carId) {
     return false;
