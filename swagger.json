@@ -46,9 +46,291 @@
         "direccion",
         "coches"
       ]
+    },
+    "Greidsla": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string"
+        },
+        "fecha": {
+          "type": "string"
+        },
+        "ciudad": {
+          "type": "string"
+        },
+        "puckets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Puckets"
+          }
+        }
+      },
+      "required": [
+        "nombre",
+        "fecha",
+        "ciudad"
+      ]
+    },
+    "Puckets": {
+      "type": "object",
+      "properties": {
+        "descripcion": {
+          "type": "string"
+        },
+        "precio": {
+          "type": "number"
+        },
+        "cantidad": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "descripcion",
+        "precio",
+        "cantidad"
+      ]
     }
   },
   "paths": {
+    "/greidsla": {
+      "get": {
+        "summary": "Get all greidslas",
+        "responses": {
+          "200": {
+            "description": "Array with all greidslas",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Greidsla"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a greidsla",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "greidsla",
+            "schema": {
+              "$ref": "#/definitions/Greidsla"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{ Message : 'greidsla creado con exito' }"
+          }
+        }
+      }
+    },
+    "/greidsla/{id}": {
+      "get": {
+        "summary": "Get one greidsla by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "ObjectId or index",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch one greidsla",
+            "schema": {
+              "$ref": "#/definitions/Greidsla"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update one greidsla by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "ObjectId or index",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "greidsla",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Greidsla"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " {message: 'Greidsla actualizado con exito'}"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete one greidsla by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Greidsla eliminado con exito'"
+          }
+        }
+      }
+    },
+    "/greidsla/{id}/puckets": {
+      "get": {
+        "summary": "Get all puckets from a greidsla especified by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch all puckets",
+            "schema": {
+              "$ref": "#/definitions/Puckets"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create one pucket ",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "puckets",
+            "schema": {
+              "$ref": "#/definitions/Puckets"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Pucket agregdo con exito'"
+          }
+        }
+      }
+    },
+    "/greidsla/{id}/puckets/{pucketId}": {
+      "get": {
+        "summary": "Get one Pucket",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "pucketId",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch one Pucket"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update one Pucket",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "pucketId",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "pucket",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Puckets"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Pucket actualizado con exito'"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete one Pucket",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "pucketId",
+            "description": "ObjectId or index",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message:'Pucket eliminado con exito'"
+          }
+        }
+      }
+    },
     "/concesionarios": {
       "get": {
         "summary": "Get all concesionarios.",
